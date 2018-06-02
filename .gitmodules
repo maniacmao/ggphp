@@ -1,0 +1,3 @@
+[submodule "tp5.com/think"]
+	path = tp5.com/think
+	url = https://github.com/maniacmao/think.git
