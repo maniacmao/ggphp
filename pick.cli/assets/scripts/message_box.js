@@ -8,6 +8,8 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
+
+
 cc.Class({
     extends: cc.Component,
 
@@ -26,23 +28,40 @@ cc.Class({
         //     set (value) {
         //         this._bar = value;
         //     }
-        // },
-        btn_main: {
+        // }, 
+        lab_message: {
+            default: null,
+            type: cc.Label
+        },   
+        btn_cancel: {
             default: null,
             type: cc.Button
-        },             
+        },     
+        btn_confirm: {
+            default: null,
+            type: cc.Button
+        }   
     },
 
-    // LIFE-CYCLE CALLBACKS:
+    // onLoad () {},
 
-    onLoad () {
-    	var self = this; // 闭包变量
-        this.btn_main.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scenes/main');
-        });   
+    init (message, callback) {
+
+        this.lab_message.string = message;
+        this.callback = callback;
     },
 
-    start () { 	
+    start () {
+
+        this.btn_cancel.node.on(cc.Node.EventType.TOUCH_END, function (event) {
+
+            this.callback(false);
+        });
+
+        this.btn_confirm.node.on(cc.Node.EventType.TOUCH_END, function (event) {
+
+            this.callback(true);
+        });
     },
 
     // update (dt) {},

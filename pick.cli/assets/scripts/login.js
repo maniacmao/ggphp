@@ -9,6 +9,7 @@
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
 var UserModel = require("user_model");
+var PrefabUI = require("prefab_ui");
 
 cc.Class({
     extends: cc.Component,
@@ -40,27 +41,61 @@ cc.Class({
         btn_login: {
             default: null,
             type: cc.Button
-        },           
+        },    
+        tip: {
+            default: null,
+            type: cc.Label
+        },    
+        loading: {
+            default: null,
+            type: cc.Prefab
+        },
+        message_box: {
+            default: null,
+            type: cc.Prefab
+        }         
     },
 
     // LIFE-CYCLE CALLBACKS:
-
+    // this.node.getChildByName("Cannon 01");
+    // cc.find("Cannon 01/Barrel/SFX", this.node);
     onLoad () {
     	var self = this; // 闭包变量
 
-        self.label_name.string = "13968021231"
-        self.label_pwd.string = "123456"
+        PrefabUI.getInstance().loading = this.loading
+        PrefabUI.getInstance().message_box = this.message_box
+
+        self.label_name.string = "13968021231";
+        self.label_pwd.string = "123456";
+        self.tip.node.active = false;
+
         this.btn_login.node.on(cc.Node.EventType.TOUCH_END, function (event) {
+            /*
             console.log("TOUCH_END" + self);
             console.log("TOUCH_END" + self.label_name.string);
             console.log("TOUCH_END" + self.label_pwd.string);
 
-            UserModel.getInstance().checkLogin(self.label_name.string, self.label_pwd.string, function(err, data){
+            self.dialog = cc.instantiate(self.loading);
 
+            var canvas = cc.find("Canvas");
+            self.dialog.parent = canvas;
+
+            UserModel.getInstance().checkLogin(self.label_name.string, self.label_pwd.string, function(err, data){
+                self.dialog.destroy()
+                self.dialog = null
                 if(err == 0){
-                    cc.director.loadScene('scene/main');
+                    cc.director.loadScene('scenes/favorite');
                 }
-            } )
+                else{
+                    self.tip.node.active = true;
+                }
+            })
+            */
+            var canvas = cc.find("Canvas");
+            var node;
+            node = PrefabUI.getInstance().CreateLoading(2000);
+            cc.log(node)
+            node.parent = canvas;
         });   
     },
 

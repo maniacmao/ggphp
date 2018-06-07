@@ -50,13 +50,13 @@ cc.Class({
     onLoad () {
     	var self = this; // 闭包变量
         this.btn_favorite.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scene/favorite');
+            cc.director.loadScene('scenes/favorite');
         });   
         this.btn_order.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scene/order');
+            cc.director.loadScene('scenes/order');
         });   
         this.btn_building.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scene/building');
+            cc.director.loadScene('scenes/building');
         });   
     },
 

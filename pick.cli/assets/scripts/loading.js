@@ -27,22 +27,29 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        btn_main: {
-            default: null,
-            type: cc.Button
-        },             
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-    	var self = this; // 闭包变量
-        this.btn_main.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scenes/main');
-        });   
+    // onLoad () {},
+
+    init(close_time_out){
+        this.close_time_out = close_time_out
     },
 
-    start () { 	
+    start () {
+        var self = this;
+        var anim = this.getComponent(cc.Animation);
+        // 指定播放 test 动画
+        anim.play('loading');
+        cc.log("loading" + this.close_time_out);
+
+
+        if( this.close_time_out>0 ){
+            setTimeout(function(dt){
+                self.node.destory();
+            }, this.close_time_out);
+        }
     },
 
     // update (dt) {},

@@ -11,7 +11,7 @@
 var httpUtils = require("http");
 
 var UserModel = cc.Class({  
-    extends: cc.Component,  
+    extends: cc.Component,
   
     properties: {  
         // foo: {  

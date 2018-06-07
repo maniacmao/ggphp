@@ -46,10 +46,10 @@ cc.Class({
     onLoad () {
     	var self = this; // 闭包变量
         this.btn_main.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scene/main');
+            cc.director.loadScene('scenes/main');
         });   
         this.btn_favorite.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scene/favorite');
+            cc.director.loadScene('scenes/favorite');
         });   
     },
 

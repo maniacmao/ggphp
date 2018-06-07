@@ -8,7 +8,8 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
-cc.Class({
+
+var PrefabUI = cc.Class({  
     extends: cc.Component,
 
     properties: {
@@ -27,23 +28,41 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        btn_main: {
-            default: null,
-            type: cc.Button
-        },             
+        message_box: null,
+        loading: null,
     },
+
+    statics: {  
+        instance: null  
+    },     
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-    	var self = this; // 闭包变量
-        this.btn_main.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scenes/main');
-        });   
+    // onLoad () {},
+
+    CreateMessageBox( message, callback ){
+ 
+        var new_node = cc.instantiate(this.message_box);
+        new_node.getComponent("message_box").init(message, callback)
+        return new_node       
     },
 
-    start () { 	
+    CreateLoading(close_time_out){
+        cc.log(this.loading)
+        var new_node = cc.instantiate(this.loading); 
+        new_node.getComponent("loading").init(close_time_out)
+        return new_node
+    },
+
+    start () {
     },
 
     // update (dt) {},
 });
+
+PrefabUI.getInstance = function () {  
+    if (PrefabUI.instance == null) {  
+        PrefabUI.instance = new PrefabUI();  
+    }  
+    return PrefabUI.instance;  
+};
