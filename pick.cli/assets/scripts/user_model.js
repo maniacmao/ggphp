@@ -25,12 +25,13 @@ var UserModel = cc.Class({
         // },  
         // ...  
         token: "xxxx",
-        building_list: null,
-        user_batch_list: null,
-        batch_list: null,
-        building_list: null,
-        favorite_building_list: null,
-        order_building_list: null,       
+        building_list: [],
+        user_batch_list: [],
+        batch_list: [],
+        building_list: [],
+        favorite_building_list: [],
+        order_building_list: [],
+        current_batch_id: 0,      
     },  
   
     statics: {  
@@ -62,6 +63,11 @@ var UserModel = cc.Class({
         }
     },  
 
+    _parseJson(data){
+        var json_object = JSON.parse(data); 
+        return json_object;
+    },
+
     checkLogin: function (name, pwd, callback) {
 
         var err = 0;
@@ -72,7 +78,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  
@@ -91,7 +97,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  
@@ -110,7 +116,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  
@@ -129,7 +135,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  
@@ -148,7 +154,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  
@@ -167,7 +173,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  
@@ -186,7 +192,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  
@@ -205,7 +211,7 @@ var UserModel = cc.Class({
                 cc.log('请检查网络！');  
                 err = -1;
             } else {  
-                json_object = JSON.parse(data);  
+                json_object = self._parseJson(data);  
                 err = json_object['err'];
                 self.sync(json_object)
             }  

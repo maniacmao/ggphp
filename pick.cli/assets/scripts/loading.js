@@ -42,8 +42,6 @@ cc.Class({
         var anim = this.getComponent(cc.Animation);
         // 指定播放 test 动画
         anim.play('loading');
-        cc.log("loading" + this.close_time_out);
-
 
         if( this.close_time_out>0 ){
             setTimeout(function(dt){

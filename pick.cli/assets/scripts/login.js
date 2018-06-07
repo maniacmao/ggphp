@@ -70,32 +70,20 @@ cc.Class({
         self.tip.node.active = false;
 
         this.btn_login.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            /*
-            console.log("TOUCH_END" + self);
-            console.log("TOUCH_END" + self.label_name.string);
-            console.log("TOUCH_END" + self.label_pwd.string);
-
-            self.dialog = cc.instantiate(self.loading);
 
             var canvas = cc.find("Canvas");
-            self.dialog.parent = canvas;
+            var node = PrefabUI.getInstance().CreateLoading(0);
+            node.parent = canvas;
 
             UserModel.getInstance().checkLogin(self.label_name.string, self.label_pwd.string, function(err, data){
-                self.dialog.destroy()
-                self.dialog = null
+                node.destroy()
                 if(err == 0){
-                    cc.director.loadScene('scenes/favorite');
+                    cc.director.loadScene('scenes/main');
                 }
                 else{
                     self.tip.node.active = true;
                 }
-            })
-            */
-            var canvas = cc.find("Canvas");
-            var node;
-            node = PrefabUI.getInstance().CreateLoading(2000);
-            cc.log(node)
-            node.parent = canvas;
+            });
         });   
     },
 

@@ -48,7 +48,6 @@ var PrefabUI = cc.Class({
     },
 
     CreateLoading(close_time_out){
-        cc.log(this.loading)
         var new_node = cc.instantiate(this.loading); 
         new_node.getComponent("loading").init(close_time_out)
         return new_node
