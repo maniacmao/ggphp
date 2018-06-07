@@ -8,6 +8,8 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
+var UserModel = require("user_model");
+
 cc.Class({
     extends: cc.Component,
 
@@ -45,13 +47,21 @@ cc.Class({
 
     onLoad () {
     	var self = this; // 闭包变量
-        this.btn_login.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            console.log("TOUCH_END" + self)
-            console.log("TOUCH_END" + self.label_name.string)
-            console.log("TOUCH_END" + self.label_pwd.string)
-            cc.director.loadScene('scene/main');
-        });   
 
+        self.label_name.string = "13968021231"
+        self.label_pwd.string = "123456"
+        this.btn_login.node.on(cc.Node.EventType.TOUCH_END, function (event) {
+            console.log("TOUCH_END" + self);
+            console.log("TOUCH_END" + self.label_name.string);
+            console.log("TOUCH_END" + self.label_pwd.string);
+
+            UserModel.getInstance().checkLogin(self.label_name.string, self.label_pwd.string, function(err, data){
+
+                if(err == 0){
+                    cc.director.loadScene('scene/main');
+                }
+            } )
+        });   
     },
 
     start () { 	
