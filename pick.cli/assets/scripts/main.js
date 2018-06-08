@@ -8,6 +8,9 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 
+var UserModel = require("user_model");
+var PrefabUI = require("prefab_ui");
+
 cc.Class({
     extends: cc.Component,
 
@@ -38,29 +41,61 @@ cc.Class({
         btn_favorite: {
             default: null,
             type: cc.Button
-        },     
-        btn_building: {
-            default: null,
-            type: cc.Button
-        },         
+        },       
+        btn_batchs: {
+            default: [], 
+            type: [cc.Button], // type 同样写成数组，提高代码可读性
+        }    
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-    	var self = this; // 闭包变量
+  
+    },
+
+    start () { 
+        var self = this; // 闭包变量
         this.btn_favorite.node.on(cc.Node.EventType.TOUCH_END, function (event) {
             cc.director.loadScene('scenes/favorite');
         });   
         this.btn_order.node.on(cc.Node.EventType.TOUCH_END, function (event) {
             cc.director.loadScene('scenes/order');
         });   
-        this.btn_building.node.on(cc.Node.EventType.TOUCH_END, function (event) {
-            cc.director.loadScene('scenes/building');
-        });   
-    },
 
-    start () { 	
+        var user_batch_list = UserModel.getInstance().user_batch_list;
+        var batch_list = UserModel.getInstance().batch_list;
+        var batch_length = batch_list.length;
+        var btn_batch_length = this.btn_batchs.length;
+
+        for(i=0; i<btn_batch_length; i++){
+            if(i<batch_length){
+
+                var label_node = this.btn_batchs[i].node.getChildByName("Label");
+                label_node.getComponent(cc.Label).string = batch_list[i].name;
+                (function(){
+                    var current_batch_id = batch_list[i].id;
+                    var j = i;
+                    self.btn_batchs[j].node.active = true;
+                    self.btn_batchs[j].node.on(cc.Node.EventType.TOUCH_END, function (event) {
+                        var canvas = cc.find("Canvas");
+                        var node = PrefabUI.getInstance().CreateLoading(0);
+                        node.parent = canvas;       
+                        cc.log(current_batch_id+'  '+j);             
+                        UserModel.getInstance().getBuilding(batch_list[j].id, function(err, data){
+                            node.destroy();
+                            if(err == 0){
+                                UserModel.getInstance().current_batch_id = current_batch_id
+                                cc.director.loadScene('scenes/building');
+                            }                        
+                        });                    
+                    });  
+                })();
+            }
+            else{
+                this.btn_batchs[i].node.active = false;
+            }
+        }       
     },
 
     // update (dt) {},
