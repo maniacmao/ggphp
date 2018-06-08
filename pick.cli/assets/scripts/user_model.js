@@ -36,29 +36,35 @@ var UserModel = cc.Class({
   
     statics: {  
         instance: null  
-    },  
-  
+    }, 
+
     // use this for initialization  
     onLoad: function () {  
     },  
       
     sync: function (json_object) { 
         if(json_object.token){
+            
             this.token = json_object.token;
         }
         if(json_object.building_list){
+
             this.building_list = json_object.building_list;
         }
         if(json_object.user_batch_list){
+
             this.user_batch_list = json_object.user_batch_list;
         }
         if(json_object.batch_list){
+
             this.batch_list = json_object.batch_list;
         }
         if(json_object.favorite_building_list){
+
             this.favorite_building_list = json_object.favorite_building_list;
         }
         if(json_object.order_building_list){
+
             this.order_building_list = json_object.order_building_list;
         }
     },  
@@ -68,7 +74,7 @@ var UserModel = cc.Class({
         return json_object;
     },
 
-    checkLogin: function (name, pwd, callback) {
+    requestCheckLogin: function (name, pwd, callback) {
 
         var err = 0;
         var json_object;
@@ -87,7 +93,7 @@ var UserModel = cc.Class({
         });
     }, 
 
-    getUser: function (callback) {
+    requestGetUser: function (callback) {
 
         var err = 0;
         var json_object;
@@ -106,26 +112,7 @@ var UserModel = cc.Class({
         });
     }, 
 
-    getBuilding: function (batch_id, callback) {
-
-        var err = 0;
-        var json_object;
-        var self = this;
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/getBuilding/token/'+self.token+'/batch_id/'+batch_id, function (data) {  
-            if (data === -1) {  
-                cc.log('请检查网络！');  
-                err = -1;
-            } else {  
-                json_object = self._parseJson(data);  
-                err = json_object['err'];
-                self.sync(json_object)
-            }  
-            cc.log(json_object)
-            callback(err, json_object)
-        });
-    }, 
-
-    addFavorite: function (building_id, callback) {
+    requestAddFavorite: function (building_id, callback) {
 
         var err = 0;
         var json_object;
@@ -144,7 +131,7 @@ var UserModel = cc.Class({
         });
     }, 
 
-    removeFavorite: function (building_id, callback) {
+    requestRemoveFavorite: function (building_id, callback) {
 
         var err = 0;
         var json_object;
@@ -163,7 +150,7 @@ var UserModel = cc.Class({
         });
     }, 
 
-    addOrder: function (building_id, callback) {
+    requestAddOrder: function (building_id, callback) {
 
         var err = 0;
         var json_object;
@@ -182,7 +169,7 @@ var UserModel = cc.Class({
         });
     }, 
 
-    gtFavorite: function (callback) {
+    requestGetFavorite: function (callback) {
 
         var err = 0;
         var json_object;
@@ -201,7 +188,7 @@ var UserModel = cc.Class({
         });
     }, 
 
-    getOrder: function (callback) {
+    requestGetOrder: function (callback) {
 
         var err = 0;
         var json_object;
