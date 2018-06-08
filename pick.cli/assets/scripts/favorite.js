@@ -7,7 +7,8 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
+var UserModel = require("user_model");
+var PrefabUI = require("prefab_ui");
 cc.Class({
     extends: cc.Component,
 
@@ -38,7 +39,15 @@ cc.Class({
         btn_favorite: {
             default: null,
             type: cc.Button
-        },            
+        },      
+        scrollview:{
+            default:null,
+            type: cc.ScrollView
+        },        
+        item_cell: {
+            default: null,
+            type: cc.Prefab
+        },           
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -51,6 +60,24 @@ cc.Class({
         this.btn_order.node.on(cc.Node.EventType.TOUCH_END, function (event) {
             cc.director.loadScene('scenes/order');
         });   
+
+        var user_model = UserModel.getInstance();
+        var batch = user_model.getCurrentBatch();
+        var building_list = user_model.getFavoriteBuilding();
+
+        cc.log(building_list)
+
+        self.content = self.scrollview.content;
+        self.opt_item_set = [];
+        for(var key in building_list){
+            var item_cell = cc.instantiate(self.item_cell);
+            var scell = item_cell.getComponent("building_cell");
+            if (scell){
+                scell.setData(building_list[key]);
+            } 
+            self.content.addChild(item_cell);
+            self.opt_item_set.push(item_cell);            
+        }  
     },
 
     start () { 	

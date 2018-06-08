@@ -41,6 +41,7 @@ var httpUtils = cc.Class({
                 callback(respone);  
             }  
         };  
+        console.log(url)
         xhr.open("GET", url, true);  
         if (cc.sys.isNative) {  
             xhr.setRequestHeader("Accept-Encoding", "gzip,deflate");  

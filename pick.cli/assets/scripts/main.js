@@ -63,39 +63,40 @@ cc.Class({
             cc.director.loadScene('scenes/order');
         });   
 
-        var user_batch_list = UserModel.getInstance().user_batch_list;
-        var batch_list = UserModel.getInstance().batch_list;
+        var user_model = UserModel.getInstance();
+        var user_batch_list = user_model.user_batch_list;
+        var batch_list = user_model.batch_list;
         var batch_length = batch_list.length;
         var btn_batch_length = this.btn_batchs.length;
 
-        for(i=0; i<btn_batch_length; i++){
-            if(i<batch_length){
+        var i = 0;
+        for(var key in batch_list){
+            var label_node = this.btn_batchs[i].node.getChildByName("Label");
+            label_node.getComponent(cc.Label).string = batch_list[key].name;
+            (function(){
+                var current_batch_id = batch_list[key].id;
+                var j = i;
+                self.btn_batchs[j].node.active = true;
+                self.btn_batchs[j].node.on(cc.Node.EventType.TOUCH_END, function (event) {
+                    var canvas = cc.find("Canvas");
+                    var node = PrefabUI.getInstance().CreateLoading(0);
+                    node.parent = canvas;       
+                    cc.log(current_batch_id+'  '+j);             
+                    user_model.requestGetUser(function(err, data){
+                        node.destroy();
+                        if(err == 0){
+                            user_model.current_batch_id = current_batch_id
+                            cc.director.loadScene('scenes/building');
+                        }                        
+                    });                    
+                });  
+            })();
+            i++;
+        }
 
-                var label_node = this.btn_batchs[i].node.getChildByName("Label");
-                label_node.getComponent(cc.Label).string = batch_list[i].name;
-                (function(){
-                    var current_batch_id = batch_list[i].id;
-                    var j = i;
-                    self.btn_batchs[j].node.active = true;
-                    self.btn_batchs[j].node.on(cc.Node.EventType.TOUCH_END, function (event) {
-                        var canvas = cc.find("Canvas");
-                        var node = PrefabUI.getInstance().CreateLoading(0);
-                        node.parent = canvas;       
-                        cc.log(current_batch_id+'  '+j);             
-                        UserModel.getInstance().getBuilding(batch_list[j].id, function(err, data){
-                            node.destroy();
-                            if(err == 0){
-                                UserModel.getInstance().current_batch_id = current_batch_id
-                                cc.director.loadScene('scenes/building');
-                            }                        
-                        });                    
-                    });  
-                })();
-            }
-            else{
-                this.btn_batchs[i].node.active = false;
-            }
-        }       
+        for(; i<btn_batch_length; i++){
+            this.btn_batchs[i].node.active = false;
+        }    
     },
 
     // update (dt) {},

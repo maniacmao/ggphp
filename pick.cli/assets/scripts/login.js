@@ -75,7 +75,7 @@ cc.Class({
             var node = PrefabUI.getInstance().CreateLoading(0);
             node.parent = canvas;
 
-            UserModel.getInstance().checkLogin(self.label_name.string, self.label_pwd.string, function(err, data){
+            UserModel.getInstance().requestCheckLogin(self.label_name.string, self.label_pwd.string, function(err, data){
                 node.destroy()
                 if(err == 0){
                     cc.director.loadScene('scenes/main');
