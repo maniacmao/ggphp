@@ -31,7 +31,7 @@ var UserModel = cc.Class({
         building_list: { default: {} },
         favorite_building_list: { default: {} },
         order_building_list: { default: {} },
-        current_batch_id: 0,      
+        current_batch_id: 0,   
     },  
   
     statics: {  
@@ -59,7 +59,9 @@ var UserModel = cc.Class({
         var building_list = {}
         for(var key in this.favorite_building_list){
             var favorite_building = this.favorite_building_list[key];
-            building_list[favorite_building.building_id] = this.building_list[favorite_building.building_id];
+            if(favorite_building.active){
+                building_list[favorite_building.building_id] = this.building_list[favorite_building.building_id];
+            }
         }
         return building_list;
     },   
@@ -69,13 +71,16 @@ var UserModel = cc.Class({
         var building_list = {}
         for(var key in this.order_building_list){
             var order_building = this.order_building_list[key];
-            building_list[order_building.building_id] = this.building_list[order_building.building_id];
+            if(order_building.active){
+                building_list[order_building.building_id] = this.building_list[order_building.building_id];
+            }
         }
         return building_list;
     },   
 
     isFavorite(building_id){
-        if(!this.favorite_building_list[building_id]){
+        var favorite_building = this.favorite_building_list[building_id]
+        if(!favorite_building || !favorite_building.active){
             return true;
         }
         return false;
@@ -85,7 +90,7 @@ var UserModel = cc.Class({
 
         for(var key in this.order_building_list){
             var order_building = this.order_building_list[key]
-            if(order_building.batch_id == batch_id){
+            if(order_building.active && order_building.batch_id == batch_id){
                 return false;
             }
         }
@@ -109,10 +114,12 @@ var UserModel = cc.Class({
     },  
       
     sync: function (json_object) { 
+
         if(json_object.token){
             
             this.token = json_object.token;
         }
+
         if(json_object.building_list){
 
             for(var i in json_object.building_list){
@@ -170,23 +177,36 @@ var UserModel = cc.Class({
         }
         if(json_object.favorite_building_list){
 
+            for(var key in this.favorite_building_list){
+                var new_favorite_building = this.favorite_building_list[key];
+                new_favorite_building.active = false;
+            }
+
             for(var i in json_object.favorite_building_list){
                 var favorite_building = json_object.favorite_building_list[i];
                 if(!this.favorite_building_list[favorite_building.building_id]){
+                    favorite_building.active = true;
                     this.favorite_building_list[favorite_building.building_id] = favorite_building;
                 }
                 else{
                     var new_favorite_building = this.favorite_building_list[favorite_building.building_id];
                     new_favorite_building.user_id = favorite_building.user_id;
                     new_favorite_building.building_id = favorite_building.building_id;
+                    new_favorite_building.active = true;
                 }
             }
         }
         if(json_object.order_building_list){
 
+            for(var key in this.order_building_list){
+                var new_order_building = this.order_building_list[key];
+                new_order_building.active = false;
+            }
+
             for(var i in json_object.order_building_list){
                 var order_building = json_object.order_building_list[i];
                 if(!this.order_building_list[order_building.building_id]){
+                    order_building.active = true;
                     this.order_building_list[order_building.building_id] = order_building;
                 }
                 else{
@@ -194,6 +214,7 @@ var UserModel = cc.Class({
                     new_order_building.user_id = order_building.user_id;
                     new_order_building.building_id = order_building.building_id;
                     new_order_building.batch_id = order_building.batch_id;
+                    new_order_building.active = true;
                 }
             }
         }

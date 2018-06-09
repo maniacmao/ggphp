@@ -50,6 +50,10 @@ cc.Class({
             default: null,
             type: cc.Button
         },  
+        btn_remove_favorite: {
+            default: null,
+            type: cc.Button
+        },  
         btn_add_order: {
             default: null,
             type: cc.Button
@@ -62,34 +66,33 @@ cc.Class({
     setData: function( data )
     {
         //這邊直接將我們的Label字串設定為 No.#
-        this.label_name.string = data.name;
-        this.label_desc.string = data.des;
-        this.label_unit_price.string = '单价'+data.unit_price+'元/m²';
-        this.label_total_price.string = data.total_price/10000+"万";
-        if(data.is_parking==1){
-            this.label_desc.node.active = false;
-            this.label_unit_price.node.active = false;
-        }
-        else{
-            this.label_desc.node.active = true;
-            this.label_unit_price.node.active = true;
-        }
+        var self = this;
+        this.building = data;
 
-        this.building = data
-        self = this
+        this._refreashUI();
+
         this.btn_add_favorite.node.on(cc.Node.EventType.TOUCH_END, function (event) {
             var canvas = cc.find("Canvas");
             var node = PrefabUI.getInstance().CreateLoading(0);
-            node.parent = canvas;                 
+            node.parent = canvas;         
             UserModel.getInstance().requestAddFavorite(self.building.id, function(err, data){
                 node.destroy();
                 if(err == 0){
-
+                    self._emitRefreashUI();
                 }                        
             });   
         });   
-        this.btn_add_favorite.node.active = UserModel.getInstance().isFavorite(data.id);
-        cc.log(data.id + " this.btn_add_favorite.node.active "+this.btn_add_favorite.node.active)
+        this.btn_remove_favorite.node.on(cc.Node.EventType.TOUCH_END, function (event) {
+            var canvas = cc.find("Canvas");
+            var node = PrefabUI.getInstance().CreateLoading(0);
+            node.parent = canvas;         
+            UserModel.getInstance().requestRemoveFavorite(self.building.id, function(err, data){
+                node.destroy();
+                if(err == 0){
+                    self._emitRefreashUI();
+                }                        
+            });   
+        });   
 
         this.btn_add_order.node.on(cc.Node.EventType.TOUCH_END, function (event) {
             var canvas = cc.find("Canvas");
@@ -98,16 +101,42 @@ cc.Class({
             UserModel.getInstance().requestAddOrder(self.building.id, function(err, data){
                 node.destroy();
                 if(err == 0){
-                    
+                    self._emitRefreashUI();
                 }                        
             });   
         }); 
-        this.btn_add_order.node.active = UserModel.getInstance().isCanAddOrder(this.building.batch_id);
-        cc.log(this.building.batch_id + " this.btn_add_order.node.active "+ this.btn_add_order.node.active)
-
     },
-    start () {
 
+    _emitRefreashUI(){
+        this.node.parent.emit('building_cell_refersh', {
+          msg: 'Hello, this is Cocos Creator',
+        });
+    },
+
+    _refreashUI(){
+
+        this.label_name.string = this.building.name;
+        this.label_desc.string = this.building.des;
+        this.label_unit_price.string = '单价'+this.building.unit_price+'元/m²';
+        this.label_total_price.string = Math.round(this.building.total_price/100)/100 +"万";
+        if(this.building.is_parking==1){
+            this.label_desc.node.active = false;
+            this.label_unit_price.node.active = false;
+        }
+        else{
+            this.label_desc.node.active = true;
+            this.label_unit_price.node.active = true;
+        }
+        this.btn_add_favorite.node.active = UserModel.getInstance().isFavorite(this.building.id);
+        this.btn_remove_favorite.node.active = !this.btn_add_favorite.node.active;
+        this.btn_add_order.node.active = UserModel.getInstance().isCanAddOrder(this.building.batch_id);
+    },
+
+    start () {
+        var self = this;
+        this.node.parent.on('building_cell_refersh', function (event) {
+            self._refreashUI();
+        });
     },
 
     // update (dt) {},

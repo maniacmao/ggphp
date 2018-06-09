@@ -65,11 +65,12 @@ cc.Class({
         for(var key in building_list){
             var item_cell = cc.instantiate(self.item_cell);
             var scell = item_cell.getComponent("building_cell");
+            cc.log([building_list[key], item_cell, scell]);
             if (scell){
                 scell.setData(building_list[key]);
             } 
             self.content.addChild(item_cell);
-            self.opt_item_set.push(item_cell);            
+            self.opt_item_set.push(item_cell);
         }      
     },
 
