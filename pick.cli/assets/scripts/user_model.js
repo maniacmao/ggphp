@@ -31,7 +31,9 @@ var UserModel = cc.Class({
         building_list: { default: {} },
         favorite_building_list: { default: {} },
         order_building_list: { default: {} },
-        current_batch_id: 0,   
+        current_batch_id: 0,  
+        // http: "http://tp5.com",
+        url_host: "http://47.100.30.205",
     },  
   
     statics: {  
@@ -232,7 +234,7 @@ var UserModel = cc.Class({
         var json_object;
         var self = this;
         var md5_pwd = CryptoJS.MD5(pwd)
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/checkLogin/name/'+name+'/pwd/'+md5_pwd, function (data) {  
+        httpUtils.getInstance().httpGets(this.url_host+'/pick/index/checkLogin/name/'+name+'/pwd/'+md5_pwd, function (data) {  
             if (data === -1) {  
                 cc.log('请检查网络！');  
                 err = -1;
@@ -251,7 +253,7 @@ var UserModel = cc.Class({
         var err = 0;
         var json_object;
         var self = this;
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/getUser/token/'+self.token, function (data) {  
+        httpUtils.getInstance().httpGets(this.url_host+'/pick/index/getUser/token/'+self.token, function (data) {  
             if (data === -1) {  
                 cc.log('请检查网络！');  
                 err = -1;
@@ -270,7 +272,7 @@ var UserModel = cc.Class({
         var err = 0;
         var json_object;
         var self = this;
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/addFavorite/token/'+self.token+'/building_id/'+building_id, function (data) {  
+        httpUtils.getInstance().httpGets(this.url_host+'/pick/index/addFavorite/token/'+self.token+'/building_id/'+building_id, function (data) {  
             if (data === -1) {  
                 cc.log('请检查网络！');  
                 err = -1;
@@ -289,7 +291,7 @@ var UserModel = cc.Class({
         var err = 0;
         var json_object;
         var self = this;
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/removeFavorite/token/'+self.token+'/building_id/'+building_id, function (data) {  
+        httpUtils.getInstance().httpGets(this.url_host+'/pick/index/removeFavorite/token/'+self.token+'/building_id/'+building_id, function (data) {  
             if (data === -1) {  
                 cc.log('请检查网络！');  
                 err = -1;
@@ -308,7 +310,7 @@ var UserModel = cc.Class({
         var err = 0;
         var json_object;
         var self = this;
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/addOrder/token/'+self.token+'/building_id/'+building_id, function (data) {  
+        httpUtils.getInstance().httpGets(this.url_host+'/pick/index/addOrder/token/'+self.token+'/building_id/'+building_id, function (data) {  
             if (data === -1) {  
                 cc.log('请检查网络！');  
                 err = -1;
@@ -327,7 +329,7 @@ var UserModel = cc.Class({
         var err = 0;
         var json_object;
         var self = this;
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/gtFavorite/name/'+self.token, function (data) {  
+        httpUtils.getInstance().httpGets(this.url_host+'/pick/index/gtFavorite/name/'+self.token, function (data) {  
             if (data === -1) {  
                 cc.log('请检查网络！');  
                 err = -1;
@@ -346,7 +348,7 @@ var UserModel = cc.Class({
         var err = 0;
         var json_object;
         var self = this;
-        httpUtils.getInstance().httpGets('http://tp5.com/pick/index/getOrder/name/'+self.token, function (data) {  
+        httpUtils.getInstance().httpGets(this.url_host+'/pick/index/getOrder/name/'+self.token, function (data) {  
             if (data === -1) {  
                 cc.log('请检查网络！');  
                 err = -1;
